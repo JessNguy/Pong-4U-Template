@@ -148,7 +148,7 @@ namespace Pong
             Font countdownFont = new Font("Courier New", 24);
 
             startLabel.Visible = false;
-            
+            Refresh();
 
             //countdown to start of game
             for (int i = 3; i < 4 && i > -1; i--) // TODO create conditions for a for loop that counts down from 3 
@@ -160,8 +160,7 @@ namespace Pong
                 Thread.Sleep(1000);
                 Refresh();
             }
-            
-            // TODO start the gameUpdateLoop timer
+            gameUpdateLoop.Enabled = true;
             newGameOk = false;
         }
 
@@ -204,9 +203,26 @@ namespace Pong
 
             #region update ball position
 
-            // TODO create code to move ball either left or right based on ballMoveRight and BALL_SPEED
+            // create code to move ball either left or right based on ballMoveRight and BALL_SPEED
+                    if (ballMoveRight == true)
+            {
+                ballX = ballX + BALL_SPEED;
 
-            // TODO create code move ball either down or up based on ballMoveDown and BALL_SPEED
+            }
+                    else if (ballMoveRight == false)
+            {
+                ballX = ballX - BALL_SPEED;
+            }
+            // create code move ball either down or up based on ballMoveDown and BALL_SPEED
+
+                    if (ballMoveDown == true)
+            {
+                ballY = ballY + BALL_SPEED;
+            } 
+                    else if (ballMoveDown == false)
+            {
+                ballY = ballY - BALL_SPEED;
+            }
 
             #endregion
 
@@ -214,14 +230,23 @@ namespace Pong
 
             if (aKeyDown == true && paddle1Y > 0)
             {
-                // TODO create code to move player 1 paddle up using paddle1Y and PADDLE_SPEED
+                paddle1Y = paddle1Y - PADDLE_SPEED;
+            }
+            
+            if (zKeyDown == true && paddle1Y < this.Height - PADDLE_LENGTH)
+            {
+                paddle1Y = paddle1Y + PADDLE_SPEED;
             }
 
-            // TODO create an if statement and code to move player 1 paddle down using paddle1Y and PADDLE_SPEED
-
-            // TODO create an if statement and code to move player 2 paddle up using paddle2Y and PADDLE_SPEED
-
-            // TODO create an if statement and code to move player 2 paddle down using paddle2Y and PADDLE_SPEED
+            if (jKeyDown == true && paddle2Y > 0)
+            {
+                paddle2Y = paddle2Y - PADDLE_SPEED;
+            }
+       
+            if (mKeyDown == true && paddle1Y < this.Height - PADDLE_LENGTH)
+            {            
+                paddle2Y = paddle2Y + PADDLE_SPEED;
+            }
 
             #endregion
 
@@ -229,11 +254,16 @@ namespace Pong
 
             if (ballY < 0) // if ball hits top line
             {
-                // TODO use ballMoveDown boolean to change direction
-                // TODO play a collision sound
+                ballMoveDown = true;
+                player.Play();
+                
             }
-            // TODO In an else if statement use ballY, this.Height, and BALL_SIZE to check for collision with bottom line
-            // If true use ballMoveDown down boolean to change direction
+            if (ballY > this.Height - BALL_SIZE)
+            {
+                ballMoveDown = false;
+                player.Play();
+            }
+         
 
             #endregion
 
@@ -241,13 +271,15 @@ namespace Pong
 
             if (ballY > paddle1Y && ballY < paddle1Y + PADDLE_LENGTH && ballX < PADDLE_EDGE + PADDLE_WIDTH) // left paddle collision
             {
+
                 // TODO play a "paddle hit" sound 
-                // TODO use ballMoveRight boolean to change direction
+                ballMoveRight = true;
+             
             }
             else if (ballY > paddle2Y && ballY < paddle2Y + PADDLE_LENGTH && ballX + BALL_SIZE > this.Width - PADDLE_EDGE - PADDLE_WIDTH / 2) // right paddle collision
             {
                 // TODO play a "paddle hit" sound 
-                // TODO use ballMoveRight boolean to change direction
+                ballMoveRight = false;
             }
 
             #endregion
@@ -260,6 +292,8 @@ namespace Pong
             {
                 // --- play score sound
                 // --- update player 2 score
+                player2Score++;
+               
                 // --- update player2Label with new score
                 // --- refresh
 
