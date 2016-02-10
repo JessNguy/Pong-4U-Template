@@ -291,21 +291,31 @@ namespace Pong
             if (ballX < 0)  // TODO ball hits left wall logic
             {
                 // --- play score sound
-                // --- update player 2 score
-                player2Score++;
-               
-                // --- update player2Label with new score
-                // --- refresh
-
-                // --- use if statement to check to see if player 2 has won the game. If true run 
-                // gameWinScore method. Else call SetParameters method to reset ball position.
-
+                player2Score = player2Score + 1;
+                player2Label.Text = "Player 2: " + Convert.ToString(player2Score);
+                Refresh();
+                SetParameters();           
+            }
+            if(player2Score == gameWinScore)
+            {
+                GameOver("Player 2");
             }
 
-            // TODO same as above but this time check for collision with the right wall
-
+            if (ballX > this.Width - BALL_SIZE)  // TODO ball hits right wall logic
+            {
+                // --- play score sound
+                player1Score = player1Score + 1;
+                player1Label.Text = "Player 1: " + Convert.ToString(player1Score);
+                Refresh();
+                SetParameters();               
+            }
+            if (player1Score == gameWinScore)
+            {
+                GameOver("Player 1");
+            }
+             
             #endregion
-            
+
             //refresh the screen, which causes the Form1_Paint method to run
             this.Refresh();
         }
@@ -318,6 +328,10 @@ namespace Pong
         private void GameOver(string winner)
         {
             newGameOk = true;
+            
+            startLabel.Text = "Winner is " + winner;
+            Thread.Sleep(2000);
+            startLabel.Text = "Would you like to play again? (Y/N)";
 
             // TODO create game over logic
             // --- stop the gameUpdateLoop
